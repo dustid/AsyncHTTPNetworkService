@@ -40,17 +40,25 @@ public enum NetworkError: Error, LocalizedError, Equatable {
             return nil
         }
     }
-}
-
-public extension Equatable where Self: Error {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs as Error == rhs as Error
+    
+    public static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
+        switch (lhs, rhs) {
+        case (.badRequest(let lhsDesc), .badRequest(let rhsDesc)),
+            (.unauthorized(let lhsDesc), .unauthorized(let rhsDesc)),
+            (.forbidden(let lhsDesc), .forbidden(let rhsDesc)),
+            (.notFound(let lhsDesc), .notFound(let rhsDesc)),
+            (.timeout(let lhsDesc), .timeout(let rhsDesc)),
+            (.serverError(let lhsDesc), .serverError(let rhsDesc)),
+            (.other(let lhsDesc), .other(let rhsDesc)):
+            return lhsDesc == rhsDesc
+        case (.invalidResponseFormat, .invalidResponseFormat),
+            (.noDataInResponse, .noDataInResponse),
+            (.decodingString, .decodingString):
+            return true
+        case (.decoding(let lhsErr), .decoding(let rhsErr)):
+            return (lhsErr as NSError).isEqual(rhsErr as NSError)
+        default:
+            return false
+        }
     }
-}
-
-public func == (lhs: Error, rhs: Error) -> Bool {
-    guard type(of: lhs) == type(of: rhs) else { return false }
-    let error1 = lhs as NSError
-    let error2 = rhs as NSError
-    return error1.domain == error2.domain && error1.code == error2.code && "\(lhs)" == "\(rhs)"
 }
