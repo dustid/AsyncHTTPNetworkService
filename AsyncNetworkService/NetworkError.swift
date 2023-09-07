@@ -40,8 +40,10 @@ public enum NetworkError: Error, LocalizedError, Equatable {
             return nil
         }
     }
-    
-    public static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
+}
+
+public extension Equatable where Self == NetworkError {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
         case (.badRequest(let lhsDesc), .badRequest(let rhsDesc)),
             (.unauthorized(let lhsDesc), .unauthorized(let rhsDesc)),
@@ -61,4 +63,11 @@ public enum NetworkError: Error, LocalizedError, Equatable {
             return false
         }
     }
+}
+
+public func == (lhs: Error, rhs: Error) -> Bool {
+    guard type(of: lhs) == type(of: rhs) else { return false }
+    let error1 = lhs as NSError
+    let error2 = rhs as NSError
+    return error1.domain == error2.domain && error1.code == error2.code && "\(lhs)" == "\(rhs)"
 }
