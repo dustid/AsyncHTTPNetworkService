@@ -24,6 +24,10 @@ public let responseValidator: ResponseValidator = { response, data in
         throw NetworkError.notFound()
     case 408:
         throw NetworkError.timeout()
+    case 409:
+        throw NetworkError.conflict()
+    case 412:
+        throw NetworkError.preconditionFailed()
     case 422:
         throw NetworkError.unprocessableContent()
     case 500..<600:
