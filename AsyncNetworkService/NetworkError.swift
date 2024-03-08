@@ -17,6 +17,8 @@ public enum NetworkError: Error, LocalizedError, Equatable {
     case forbidden(contextualizedDescription: String? = nil)
     case notFound(contextualizedDescription: String? = nil)
     case timeout(contextualizedDescription: String? = nil)
+    case conflict(contextualizedDescription: String? = nil)
+    case preconditionFailed(contextualizedDescription: String? = nil)
     case unprocessableContent(contextualizedDescription: String? = nil)
     case serverError(contextualizedDescription: String? = nil)
     case other(contextualizedDescription: String? = nil)
@@ -35,6 +37,8 @@ public enum NetworkError: Error, LocalizedError, Equatable {
         case forbidden
         case notFound
         case timeout
+        case conflict
+        case preconditionFailed
         case unprocessableContent
         case serverError
         case other
@@ -53,6 +57,8 @@ public enum NetworkError: Error, LocalizedError, Equatable {
         case .forbidden: return .forbidden
         case .notFound: return .notFound
         case .timeout: return .timeout
+        case .conflict: return .conflict
+        case .preconditionFailed: return .preconditionFailed
         case .unprocessableContent: return .unprocessableContent
         case .serverError: return .serverError
         case .other: return .other
@@ -70,6 +76,10 @@ public enum NetworkError: Error, LocalizedError, Equatable {
         case .notFound(let contextualizedDescription):
             return contextualizedDescription
         case .timeout(let contextualizedDescription):
+            return contextualizedDescription
+        case .conflict(let contextualizedDescription):
+            return contextualizedDescription
+        case .preconditionFailed(let contextualizedDescription):
             return contextualizedDescription
         case .unprocessableContent(let contextualizedDescription):
             return contextualizedDescription
